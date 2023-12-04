@@ -1,0 +1,78 @@
+{% extends "design/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+	<h1>Часть получена (Incoming)</h1>    
+		<div class="media-body" >
+			<form method="POST">
+				{% csrf_token %}
+				<div class="row m-1 ">
+				<div class="col-6 p-1">				
+				<a  href="{% url 'parts-detail-page' purchase.part_id.id %}" title="Back" alt="Back">
+				<img class="float-left p-1" src="{% static 'icons/back.png' %}" width="32" title="Back" alt="Back">
+				</a>
+				</div>
+				<div class="col-6 p-1">
+					
+				</div>
+				</div>
+					<div class="row m-1">
+						<div class="col-3 border rounded p-1 "><strong>Да:</strong><br>{{ purchase.purchase_date }}</div>
+						<div class="col-3 border rounded p-1 "><strong>Номер заказа:</strong><br>{{ purchase.po_number }}</div>
+						<div class="col-3 border rounded p-1 "><strong>Номер счета-фактуры</strong><br>{{ purchase.invoice_number }}</div>
+						<div class="col-3 border rounded p-1 "><strong>Заказанное количество:</strong><br>{% if purchase.qty_ordered %}{{ purchase.qty_ordered }}{% endif %}</div>										
+					</div>			
+					<div class="row m-1">
+						<div class="col-6 border rounded p-1 "><strong>Название поставщика:</strong><br>{{ purchase.vendor }}</div>	
+						<div class="col-6 border rounded p-1 "><strong>Номер поставщика:</strong><br>{{ purchase.vendor_phone }}</div>				
+					</div>	
+					<div class="row m-1">
+						<div class="col-12 border rounded p-1 "><strong>Запись:</strong><br>{{ purchase.purchase_note|safe }}</div>	
+					</div>					
+				
+				
+                <div class="row m-1"><div class="col-12 border rounded p-1"><h3>Существующее местоположение склада</h3></div></div>
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1"><strong>Склад</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Стеллаж</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Цена</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Уровень</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Позиция</strong></div>					
+					<div class="col-2 border rounded p-1"><strong>Кол-во</strong></div>
+				</div>	
+				{% for currentlocation in parts_location %}
+					<div class="row m-1">
+						<div class="col-2 border rounded p-1">{{ currentlocation.warehouse }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.rack }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.bay }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.level }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.position }}</div>						
+						<div class="col-2 border rounded p-1">{{ currentlocation.quantity }}</div>
+					</div>
+				{% endfor %}
+				<br><br>
+				{%if form.errors %}
+				<div class="row m-1">
+					<div class="col-12 p-1"><small class="text-danger">{{ form.errors|escape }}</small></div>
+				</div>		
+				{%endif%}
+				<div class="row m-1"><div class="col-12 border rounded p-1"><h3>Местоположение поступающего инвентаря</h3></div></div>
+				<div class="row m-1">
+						<div class="col-2 border rounded p-1">{{ form.warehouse }}</div>
+						<div class="col-1 border rounded p-1">{{ form.rack }}</div>
+						<div class="col-1 border rounded p-1">{{ form.bay }}</div>
+						<div class="col-1 border rounded p-1">{{ form.level }}</div>
+						<div class="col-1 border rounded p-1">{{ form.position }}</div>						
+						<div class="col-2 border rounded p-1">{{ form.quantity }}</div>
+				</div>
+				
+				
+				<div class="row m-1">
+					<div class="col-12  p-1 text-center"><button type="submit" class="btn btn-primary">Сохранить</button></div>
+				</div>	
+			</form>
+		</div>   
+
+
+{% endblock content %}
